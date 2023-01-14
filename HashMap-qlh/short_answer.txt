@@ -1,0 +1,60 @@
+Assignment 2: STL HashMap (short answer questions)
+Names:qlh
+
+1. Templates and Template Classes
+Q : In the rehash() function, the for-each loop contains an auto&.
+What is the deduced type of that auto, and why the ampersand necessary?
+A :    类型：node* 	原因：下面要修改curr（改变其指针指向），
+若不加&，则修改的只是其副本
+
+2. HashMap Pair Type
+Q : STL containers store elements of type value_type, and for your HashMap this value_type is a std::pair<const K, M>.
+What would be the problem in the HashMap class if value_type were instead std::pair<K, M>?
+A : 会造成key可能被修改，但事实上不应该这么做，所有map的key都应为
+const，否则一旦擅自改动key，value就不与之对应了（stl中的map类和set类）
+的key也都不能修改
+
+3. Find vs find
+Q : In addition to the HashMap::find member function, there is also a std::find function in the STL algorithms library.
+If you were searching for key k in HashMap m, is it preferable to call m.find(k) or std::find(m.begin(), m.end(), k)?
+A : m.find()，因为hash table查找的平均时间复杂度更低，为O(1)；
+而std::find()为O(N)
+
+4. RAII?
+Q : This HashMap class is RAII-compliant. Explain why.
+A : HashMap<K, M, H>::~HashMap() { clear(); }
+     在HashMap的析构函数中调用clear()，实现资源的自动释放
+
+5. Privacy
+Q : Why is the HashMapIterator's constructor private? How do HashMapIterators get constructed if the constructor is private?
+A : 原因：HashMapIterator要实现对HashMap的迭代，那必然要去访问
+其内部的各种私有成员（通过friend class实现），所以HashMapIterator
+的构造函数就得是private，不然外部就可通过它来随意访问HashMap的
+私有资源了。
+    如何实现：friend class可访问private资源
+
+6. Increments
+Q : Briefly explain the implementation of HashMapIterator's operator++, which we provide for you. How does it work and what checks does it have?
+A : 常规链表操作；非空检查
+
+7. Did We Make A Mistake?
+Q : Why is there both a const and non-const version of at(), but only a non-const version of operator[]?
+    (unlike in Vector where operator[] also had a const version).
+A :  因为可能要实现insert操作
+
+8. Now Streaming on iTunes
+Q : Look at the function signature for the stream insertion (operator<<) in hashmap.cpp.
+Briefly explain the syntax for this function signature and how this works.
+A : 传入参数中--HashMap为const防止被修改；ostream不为const，因为
+要对它进行操作
+
+9. Attachment Issues
+Q : Why is it that we need to implement the special member functions in the HashMap class,
+but we can default all the special member functions in the HashMapIterator class?
+A : HashMapIterator中的资源为单个value，大小固定，用默认SMF即可；
+而HashMap中有链表，内存动态分配，需自定义SMF来进行构造
+
+10. Move Semantics
+Q : In your move constructor or move assignment operator, why did you have to std::move each member,
+even though the parameter (named rhs) is already an r-value reference?
+A : 将类对象用move()强转为右值，并不影响类中成员变量的左右值属性，该是啥还是啥
