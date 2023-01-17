@@ -7,6 +7,8 @@ HashMap作业要求链接（这个页面是几年前的，但无所谓，和我g
 
 STL中的map类简介：https://blog.csdn.net/qlhhahaha/article/details/127351411?spm=1001.2014.3001.5501
 
+CS106L课程ppt https://www.aliyundrive.com/s/NDc46efeaSV 密码：49du
+
 
 
 作业使用指南：
